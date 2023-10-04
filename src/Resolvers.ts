@@ -1,35 +1,16 @@
-import houses from "../graphql/dataset";
-import {hostname} from "os";
+import {HouseCreateInput, HouseUpdateInput} from "./types/types";
+const houseService = require('../services/houseService');
+
 const Resolvers = {
     Query: {
-        getAllHouses: () => houses,
-        getHouse: (_: any, args: any) => {
-            return houses.find((house) => house.id === args.id);
-        },
-        findBiggestByNumberOfRooms: (_: any, args: any) => {
-            return houses.find((house) => house.longitude === args.longitude);
-        },
-        findBiggestAndClosest: (_: any, args: any) => {
-            return houses.find((house) => house.longitude === args.longitude);
-        },
+        getAllHouses: () => houseService.getAllHouses(),
+        getHouse: (id) => houseService.getHouse(id),
+        findBiggestByNumberOfRooms: (numberOfRooms) => houseService.findBiggestByNumberOfRooms(numberOfRooms),
+        findBiggestAndClosest: (latitude, longitude) => houseService.findBiggestAndClosest(latitude, longitude),
     },
     Mutation: {
-        addHouse: (_: any, args: any) => {
-            const newHouse = {
-                id: houses.length + 1,
-                name: args.name,
-                longitude: args.longitude,
-                latitude: args.latitude,
-                numberOfRooms: args.numberOfRooms,
-                builtDate: args.builtDate
-            };
-            houses.push(newHouse);
-            return newHouse; //return the new object's result
-        },
-        updateHouse: (_: any, args: any) => {
-            const updatedHouse = houses.find(house => house.id === args.id);
-            Object.keys(args)
-        }
+        addHouse: (request: HouseCreateInput) => houseService.createHouse(request),
+        updateHouse: (request: HouseUpdateInput) => houseService.updateHouse(request)
     },
 };
 export default Resolvers;

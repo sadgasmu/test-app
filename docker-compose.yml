@@ -7,6 +7,8 @@ services:
       MYSQL_DATABASE: password
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
 
   app:
     build:
@@ -17,3 +19,6 @@ services:
       - mysql
     volumes:
       - ./:/app
+
+volumes:
+  mysql_data:

@@ -1,14 +1,15 @@
 import { ApolloServer } from "apollo-server-express";
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
-import resolvers from "./graphql/resolvers/index";
+import resolvers from "./src/graphql/resolvers/index";
 import express from "express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import http from "http";
+import knex from "knex";
 
 async function startApolloServer(resolvers: any) {
     const app = express();
-    const schemaString = readFileSync('./graphql/schema.graphql', 'utf8');
+    const schemaString = readFileSync('./src/graphql/schema.graphql', 'utf8');
 
     const schema = makeExecutableSchema({
         typeDefs: schemaString,
@@ -30,6 +31,3 @@ async function startApolloServer(resolvers: any) {
 }
 //in the end, run the server and pass in our Schema and Resolver.
 startApolloServer(resolvers).then(() => console.log('Server started!'));
-
-
-

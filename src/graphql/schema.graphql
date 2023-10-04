@@ -3,8 +3,8 @@ type House {
     name: String
     builtDate: String
     numberOfRooms: Int
-    latitude: Int
-    longitude: Int
+    latitude: Float
+    longitude: Float
 }
 
 input HouseUpdateInput {
@@ -12,23 +12,23 @@ input HouseUpdateInput {
     name: String
     builtDate: String
     numberOfRooms: Int
-    latitude: Int
-    longitude: Int
+    latitude: Float
+    longitude: Float
 }
 
 input HouseCreateInput {
     name: String
     builtDate: String
     numberOfRooms: Int
-    latitude: Int
-    longitude: Int
+    latitude: Float
+    longitude: Float
 }
 
 type Query {
     getAllHouses: [House]
     getHouse(id: Int): House
     findBiggestByNumberOfRooms: [House]
-    findBiggestAndClosest(longitude: Int, latitude: Int): [House]
+    findBiggestAndClosest(longitude: Float, latitude: Float): [House]
 }
 
 type Mutation {

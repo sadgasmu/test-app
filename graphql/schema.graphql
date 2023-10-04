@@ -1,0 +1,37 @@
+type House {
+    id: ID!
+    name: String
+    builtDate: String
+    numberOfRooms: Int
+    latitude: Int
+    longitude: Int
+}
+
+input HouseUpdateInput {
+    id: ID!
+    name: String
+    builtDate: String
+    numberOfRooms: Int
+    latitude: Int
+    longitude: Int
+}
+
+input HouseCreateInput {
+    name: String
+    builtDate: String
+    numberOfRooms: Int
+    latitude: Int
+    longitude: Int
+}
+
+type Query {
+    getAllHouses: [House]
+    getHouse(id: Int): House
+    findBiggestByNumberOfRooms: [House]
+    findBiggestAndClosest(longitude: Int, latitude: Int): [House]
+}
+
+type Mutation {
+    addHouse(data: HouseCreateInput): House
+    updateHouse(data: HouseUpdateInput): House
+}

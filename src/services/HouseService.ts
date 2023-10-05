@@ -30,7 +30,28 @@ export default class HouseService {
     private db: Knex = (new MysqlRepository()).getClient();
 
     async getAllHouses() {
-        console.log('db: ', this.db);
         return this.db.select('*').from('houses');
+    }
+
+    async getHouse(id) {
+        return this.db.select('*').from('houses').where({id}).first();
+    }
+
+    async findBiggestByNumberOfRooms(numberOfRooms) {
+        return this.db.select('*').from('houses')
+            .where('number_of_rooms', numberOfRooms).limit(3);
+    }
+
+    async findBiggestAndClosest(latitude, longitude) {
+        return this.db.select('*').from('houses')
+            .where({ latitude, longitude }).limit(5);
+    }
+
+    async updateHouse(request: HouseUpdateInput) {
+        return this.db('houses').where({id: request.id}).update(request, ['*']);
+    }
+
+    async createHouse(request: HouseCreateInput) {
+        return this.db.insert(request).into('houses');
     }
 }

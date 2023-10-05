@@ -3,13 +3,13 @@ import { HouseCreateInput, HouseUpdateInput } from "../../../types/types";
 
 const house = {
     Mutation: {
-        addHouse: (request: HouseCreateInput) => {
-            const houseService = new HouseService();
-            return houseService.createHouse(request);
+        addHouse: (_: any, data: HouseCreateInput) => {
+            const houseService: HouseService = new HouseService();
+            return houseService.createHouse(data);
         },
-        updateHouse: (request: HouseUpdateInput) => {
-            const houseService = new HouseService();
-            return houseService.updateHouse(request);
+        updateHouse: (_: any, data: HouseUpdateInput) => {
+            const houseService: HouseService = new HouseService();
+            return houseService.updateHouse(data);
         },
     },
 }

@@ -1,35 +1,33 @@
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeResolvers } from '@graphql-tools/merge';
 import path from "path";
+import {GraphQLScalarType} from "graphql/type";
 
+const resolvers = {
+    NumericID: new GraphQLScalarType({
+        name: 'NumericID',
+        description: 'A custom scalar type to represent numeric IDs',
+
+        parseValue(value) {
+            return Number.parseInt(<string>value, 10);
+        },
+
+        serialize(value) {
+            if (typeof value === 'number') {
+                return value;
+            }
+            return null;
+        },
+
+        parseLiteral(ast) {
+            if (ast.kind === 'IntValue') {
+                return parseInt(ast.value, 10);
+            }
+            return null;
+        },
+    }),
+};
 
 const resolversArray = loadFilesSync(path.join(__dirname), {recursive: true});
 
-export default mergeResolvers(resolversArray);
-
-// import { join } from 'path';
-//
-// const collectResolvers = (dir: string): any => {
-//     const resolvers: any = {};
-//
-//     readdirSync(dir).forEach((file) => {
-//         const filePath = join(dir, file);
-//         const isDirectory = statSync(filePath).isDirectory();
-//
-//         if (isDirectory) {
-//             // If it's a directory, recursively collect resolvers from subdirectory
-//             resolvers[file] = collectResolvers(filePath);
-//         } else if (file.endsWith('.ts')) {
-//             // Import and add the resolver module to the resolvers object
-//             const module = require(filePath);
-//             resolvers[file.replace('.ts', '')] = module.default || module;
-//         }
-//     });
-//
-//     return resolvers;
-// };
-//
-// const allResolvers = collectResolvers(__dirname);
-//
-// console.log(allResolvers)
-// export default allResolvers;
+export default mergeResolvers([...resolversArray, resolvers]);

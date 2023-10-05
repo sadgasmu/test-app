@@ -7,6 +7,7 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
+  NumericID: number
   ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
@@ -17,7 +18,7 @@ export type Scalars = {
 export type House = {
   __typename?: 'House';
   builtDate?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['NumericID']['output'];
   latitude?: Maybe<Scalars['Int']['output']>;
   longitude?: Maybe<Scalars['Int']['output']>;
   name?: Maybe<Scalars['String']['output']>;
@@ -34,7 +35,7 @@ export type HouseCreateInput = {
 
 export type HouseUpdateInput = {
   builtDate?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['ID']['input'];
+  id: Scalars['NumericID']['input'];
   latitude?: InputMaybe<Scalars['Int']['input']>;
   longitude?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;

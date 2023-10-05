@@ -5,7 +5,6 @@ import resolvers from "./src/graphql/resolvers/index";
 import express from "express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import http from "http";
-import knex from "knex";
 
 async function startApolloServer(resolvers: any) {
     const app = express();
@@ -15,7 +14,9 @@ async function startApolloServer(resolvers: any) {
         typeDefs: schemaString,
         resolvers
     });
+
     const httpServer = http.createServer(app);
+
     const server = new ApolloServer({
         typeDefs: schema,
         resolvers,
@@ -24,7 +25,9 @@ async function startApolloServer(resolvers: any) {
     }) as any;
 
     await server.start(); //start the GraphQL server.
+
     server.applyMiddleware({ app });
+
     app.listen(4000, () => {
         console.log(`Server listening on port ${4000}`);
     });

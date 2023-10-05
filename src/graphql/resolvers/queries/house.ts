@@ -2,21 +2,21 @@ import HouseService from "../../../services/HouseService";
 
 const house = {
     Query: {
-        getAllHouses: () => {
+        getAllHouses: async () => {
             const houseService: HouseService = new HouseService();
-            return houseService.getAllHouses();
+            return await houseService.getAllHouses();
         },
-        getHouse: (id) => {
+        getHouse: async (_: any, {id}: { id: number }) => {
             const houseService: HouseService = new HouseService();
-            return houseService.getHouse(id);
+            return await houseService.getHouse(id);
         },
-        findBiggestByNumberOfRooms: (numberOfRooms) => {
+        findBiggestByNumberOfRooms: async (_: any, {latitude, longitude}: { numberOfRooms: number }) => {
             const houseService: HouseService = new HouseService();
-            return houseService.findBiggestByNumberOfRooms(numberOfRooms);
+                return await houseService.findBiggestByNumberOfRooms(latitude, longitude);
         },
-        findBiggestAndClosest: (latitude, longitude) => {
+        findBiggestAndClosest: async (_: any, {latitude, longitude}: { latitude: number, longitude: number }) => {
             const houseService: HouseService = new HouseService();
-            return houseService.findBiggestAndClosest(latitude, longitude)
+            return await houseService.findBiggestAndClosest(latitude, longitude)
         },
     },
 }

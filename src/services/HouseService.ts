@@ -1,30 +1,6 @@
 import {HouseCreateInput, HouseUpdateInput} from "../types/types";
-import knex, {Knex} from "knex";
+import {Knex} from "knex";
 import MysqlRepository from "./MysqlRepository";
-
-// const getAllHouses = async () =>
-//     await db('houses');
-//
-// const getHouseById = async (id) =>
-//     db('houses').where('id', id).first();
-//
-// const createHouse = async (request: HouseCreateInput) =>
-//     await db('houses').insert({request});
-//
-//
-// const updateHouse = async (request: HouseUpdateInput) =>
-//     db('houses').where('id', request.id).update(request);
-//
-// const deleteHouse = async (id) => {
-//     await db('houses').where('id', id).first().del();
-//     return { message: 'House deleted successfully!' }
-// };
-//
-// const findBiggestByNumberOfRooms = async (numberOfRooms) =>
-//     db('houses').where('numberOfRooms', numberOfRooms);
-//
-// const findBiggestAndClosest = async (latitude, longitude) =>
-//     db('hoses').where('latitude', latitude).where('longitude', longitude);
 
 export default class HouseService {
     private db: Knex = (new MysqlRepository()).getClient();
@@ -33,18 +9,20 @@ export default class HouseService {
         return this.db.select('*').from('houses');
     }
 
-    async getHouse(id) {
-        return this.db.select('*').from('houses').where({id}).first();
+    async getHouse(id: number) {
+        return this.db.select('*').from('houses').where({id: id}).first();
     }
 
-    async findBiggestByNumberOfRooms(numberOfRooms) {
-        return this.db.select('*').from('houses')
-            .where('number_of_rooms', numberOfRooms).limit(3);
+    async findBiggestByNumberOfRooms(latitude: number, longitude: number) {
+        return this.db.select('*').from('houses').limit(3);
     }
 
-    async findBiggestAndClosest(latitude, longitude) {
+    async findBiggestAndClosest(latitude: number, longitude: number) {
         return this.db.select('*').from('houses')
-            .where({ latitude, longitude }).limit(5);
+            .where({
+                latitude,
+                longitude
+            }).limit(5);
     }
 
     async updateHouse(request: HouseUpdateInput) {

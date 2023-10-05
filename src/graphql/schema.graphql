@@ -1,5 +1,7 @@
+scalar NumericID
+
 type House {
-    id: ID!
+    id: NumericID!
     name: String
     builtDate: String
     numberOfRooms: Int
@@ -8,7 +10,7 @@ type House {
 }
 
 input HouseUpdateInput {
-    id: ID!
+    id: NumericID!
     name: String
     builtDate: String
     numberOfRooms: Int
@@ -26,7 +28,7 @@ input HouseCreateInput {
 
 type Query {
     getAllHouses: [House]
-    getHouse(id: Int): House
+    getHouse(id: NumericID): House
     findBiggestByNumberOfRooms: [House]
     findBiggestAndClosest(longitude: Float, latitude: Float): [House]
 }

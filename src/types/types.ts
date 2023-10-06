@@ -68,11 +68,11 @@ export type Query = {
 
 
 export type QueryFindBiggestAndNewestByLocationArgs = {
-  latitude?: InputMaybe<Scalars['Float']['input']>;
-  longitude?: InputMaybe<Scalars['Float']['input']>;
+  latitude: Scalars['Float']['input'];
+  longitude: Scalars['Float']['input'];
 };
 
 
 export type QueryGetHouseArgs = {
-  id?: InputMaybe<Scalars['NumericID']['input']>;
+  id: Scalars['NumericID']['input'];
 };

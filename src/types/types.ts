@@ -60,20 +60,14 @@ export type MutationUpdateHouseArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  findBiggestAndClosest?: Maybe<Array<Maybe<House>>>;
-  findBiggestAndNewest?: Maybe<Array<Maybe<House>>>;
+  findBiggestAndNewestByLocation?: Maybe<Array<Maybe<House>>>;
+  findBiggestHouses?: Maybe<Array<Maybe<House>>>;
   getAllHouses?: Maybe<Array<Maybe<House>>>;
   getHouse?: Maybe<House>;
 };
 
 
-export type QueryFindBiggestAndClosestArgs = {
-  latitude?: InputMaybe<Scalars['Float']['input']>;
-  longitude?: InputMaybe<Scalars['Float']['input']>;
-};
-
-
-export type QueryFindBiggestAndNewestArgs = {
+export type QueryFindBiggestAndNewestByLocationArgs = {
   latitude?: InputMaybe<Scalars['Float']['input']>;
   longitude?: InputMaybe<Scalars['Float']['input']>;
 };

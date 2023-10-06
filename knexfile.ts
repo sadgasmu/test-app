@@ -9,10 +9,10 @@ module.exports = {
             database: 'houses_app',
         },
         migrations: {
-            directory: './migrations',
+            directory: './db/migrations',
         },
-        // seeds: {
-        //     directory: './db/seeds',
-        // },
+        seeds: {
+            directory: './db/seeds',
+        },
     },
 };

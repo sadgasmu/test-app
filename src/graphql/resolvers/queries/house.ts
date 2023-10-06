@@ -1,5 +1,4 @@
 import HouseService from "../../../services/HouseService";
-import {QueryFindBiggestAndClosestArgs} from "../../../types/types";
 
 export default {
     Query: {
@@ -11,13 +10,13 @@ export default {
             const houseService: HouseService = new HouseService();
             return await houseService.getHouse(id);
         },
-        findBiggestAndNewest: async (_: any, data: QueryFindBiggestAndClosestArgs) => {
+        findBiggestHouses: async (_: any) => {
             const houseService: HouseService = new HouseService();
-            return await houseService.findBiggestAndNewest(data);
+            return await houseService.findBiggestHouses();
         },
-        findBiggestAndClosest: async (_: any, data: QueryFindBiggestAndClosestArgs) => {
+        findBiggestAndNewestByLocation: async (_: any, data: {longitude: number, latitude: number}) => {
             const houseService: HouseService = new HouseService();
-            return await houseService.findBiggestAndClosest(data);
+            return await houseService.findBiggestAndNewestByLocation(data);
         },
     },
 };

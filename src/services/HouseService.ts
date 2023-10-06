@@ -1,7 +1,6 @@
-import {HouseCreateInput, HouseUpdateInput, QueryFindBiggestAndClosestArgs} from "../types/types";
+import {HouseCreateInput, HouseUpdateInput} from "../types/types";
 import {Knex} from "knex";
 import MysqlRepository from "./MysqlRepository";
-import NoHousesFoundException from "../exceptions/NoHousesFoundException";
 
 export default class HouseService {
     private db: Knex = (new MysqlRepository()).getClient();
@@ -14,34 +13,29 @@ export default class HouseService {
         return this.db.select('*').from('houses').where({id: id}).first();
     }
 
-    async findHousesByDistance({ latitude, longitude }: QueryFindBiggestAndClosestArgs, orderBy: any, limit: number) {
-        const MAX_DISTANCE_IN_METERS = 1000;
+    async findBiggestHouses() {
+        return this.db
+            .select('*')
+            .from('houses')
+            .orderBy('numberOfRooms', 'desc')
+            .limit(5);
+    }
+
+    async findBiggestAndNewestByLocation({ latitude, longitude }: { latitude: number, longitude: number }) {
+        const biggestHouses = await this.findBiggestHouses();
 
         return this.db
             .select('*')
             .from('houses')
+            .whereIn('id', [...biggestHouses].map((house) => house.id))
             .whereRaw(`
               ST_DISTANCE(
                 POINT(longitude, latitude),
                 POINT(?, ?)
-            ) < ?`, [longitude, latitude, MAX_DISTANCE_IN_METERS])
-            .orderBy(orderBy)
-            .limit(limit);
-    }
-
-    async findBiggestAndNewest({ latitude, longitude }: QueryFindBiggestAndClosestArgs) {
-        const orderBy = [
-            { column: 'numberOfRooms', order: 'desc' },
-            { column: 'builtDate', order: 'desc' },
-        ];
-
-        return await this.findHousesByDistance({ latitude, longitude }, orderBy, 3);
-    }
-
-    async findBiggestAndClosest({ latitude, longitude }: QueryFindBiggestAndClosestArgs) {
-        const orderBy = [{ column: 'numberOfRooms', order: 'desc' }];
-
-        return await this.findHousesByDistance({ latitude, longitude }, orderBy, 5);
+            )`, [longitude, latitude])
+            .orderBy('numberOfRooms', 'desc')
+            .orderBy('builtDate', 'desc')
+            .limit(3);
     }
 
     async updateHouse(request: HouseUpdateInput) {

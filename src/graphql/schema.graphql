@@ -29,8 +29,8 @@ input HouseCreateInput {
 type Query {
     getAllHouses: [House]
     getHouse(id: NumericID): House
-    findBiggestAndNewest(longitude: Float, latitude: Float): [House]
-    findBiggestAndClosest(longitude: Float, latitude: Float): [House]
+    findBiggestHouses: [House]
+    findBiggestAndNewestByLocation(longitude: Float, latitude: Float): [House]
 }
 
 type Mutation {

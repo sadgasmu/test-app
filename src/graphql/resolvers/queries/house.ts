@@ -1,4 +1,5 @@
 import HouseService from "../../../services/HouseService";
+import {ApolloError} from "apollo-server-core";
 
 export default {
     Query: {
@@ -14,7 +15,10 @@ export default {
             const houseService: HouseService = new HouseService();
             return await houseService.findBiggestHouses();
         },
-        findBiggestAndNewestByLocation: async (_: any, data: {longitude: number, latitude: number}) => {
+        findBiggestAndNewestByLocation: async (_: any, data: {
+            longitude: number,
+            latitude: number
+        }) => {
             const houseService: HouseService = new HouseService();
             return await houseService.findBiggestAndNewestByLocation(data);
         },

@@ -1,5 +1,17 @@
 scalar NumericID
 
+type Query {
+    getAllHouses: [House]
+    getHouse(id: NumericID!): House
+    findBiggestHouses: [House]
+    findBiggestAndNewestByLocation(longitude: Float!, latitude: Float!): [House]
+}
+
+type Mutation {
+    addHouse(data: HouseCreateInput): House
+    updateHouse(data: HouseUpdateInput): House
+}
+
 type House {
     id: NumericID!
     name: String
@@ -24,16 +36,4 @@ input HouseCreateInput {
     numberOfRooms: Int
     latitude: Float
     longitude: Float
-}
-
-type Query {
-    getAllHouses: [House]
-    getHouse(id: NumericID): House
-    findBiggestHouses: [House]
-    findBiggestAndNewestByLocation(longitude: Float, latitude: Float): [House]
-}
-
-type Mutation {
-    addHouse(data: HouseCreateInput): House
-    updateHouse(data: HouseUpdateInput): House
 }

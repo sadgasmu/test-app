@@ -3,11 +3,11 @@ import {HouseCreateInput, HouseUpdateInput} from "../../../types/types";
 
 export default {
     Mutation: {
-        addHouse: async (_: any, {data}: {data: HouseCreateInput}) => {
+        addHouse: async (_: any, {data}: { data: HouseCreateInput }) => {
             const houseService: HouseService = new HouseService();
             return await houseService.createHouse(data);
         },
-        updateHouse: (_: any, data: HouseUpdateInput) => {
+        updateHouse: (_: any, {data}: { data: HouseUpdateInput }) => {
             const houseService: HouseService = new HouseService()
             return houseService.updateHouse(data);
         },

@@ -1,12 +1,10 @@
 import { HouseCreateInput, HouseUpdateInput } from "../types/types";
 import HouseRepository from "../repositories/HouseRepository";
+import NoHousesFoundException from "../exceptions/NoHousesFoundException";
+import HouseNotFoundException from "../exceptions/HouseNotFoundException";
 
 export default class HouseService {
-    private houseRepository: HouseRepository;
-
-    constructor() {
-        this.houseRepository = new HouseRepository();
-    }
+    private houseRepository: HouseRepository = new HouseRepository();
 
     async getAllHouses() {
         return this.houseRepository.getAllHouses();
@@ -21,8 +19,6 @@ export default class HouseService {
     }
 
     async findBiggestAndNewestByLocation({ latitude, longitude }: { latitude: number, longitude: number }) {
-        const biggestHouses = await this.findBiggestHouses();
-
         return this.houseRepository.findBiggestAndNewestByLocation(latitude, longitude);
     }
 

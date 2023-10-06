@@ -1,10 +1,10 @@
+import http from "http";
+import express from "express";
+import resolvers from "./src/graphql/resolvers/index";
 import { ApolloServer } from "apollo-server-express";
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
-import resolvers from "./src/graphql/resolvers/index";
-import express, {response} from "express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import http from "http";
 
 async function startApolloServer(resolvers: any) {
     const app = express();
@@ -20,11 +20,10 @@ async function startApolloServer(resolvers: any) {
     const server = new ApolloServer({
         typeDefs: schema,
         resolvers,
-        //tell Express to attach GraphQL functionality to the server
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     }) as any;
 
-    await server.start(); //start the GraphQL server.
+    await server.start();
 
     server.applyMiddleware({ app });
 
@@ -32,5 +31,5 @@ async function startApolloServer(resolvers: any) {
         console.log(`Server listening on port ${4000}`);
     });
 }
-//in the end, run the server and pass in our Schema and Resolver.
+
 startApolloServer(resolvers).then(() => console.log('Server started!'));

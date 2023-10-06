@@ -1,50 +1,67 @@
-import { Knex } from "knex";
+import {Knex} from "knex";
 import {HouseCreateInput, HouseUpdateInput} from "../types/types";
 import MysqlRepository from "./MysqlRepository";
+import HouseNotFoundException from "../exceptions/HouseNotFoundException";
+
+const {omit} = require("lodash");
 
 export default class HouseRepository {
+    private tableName: string = 'houses';
     private db: Knex = (new MysqlRepository()).getClient();
 
     async getAllHouses() {
-        return this.db.select('*').from('houses');
+        return this.db.select('*').from(this.tableName);
     }
 
     async getHouse(id: number) {
-        return this.db.select('*').from('houses').where({ id }).first();
+        return this.db.select('*').from(this.tableName).where({id}).first();
     }
 
     async findBiggestHouses() {
-        return this.db
-            .select('*')
-            .from('houses')
-            .orderBy('numberOfRooms', 'desc')
-            .limit(5);
+        return this.orderByNumberOfRooms().limit(5);
     }
 
     async findBiggestAndNewestByLocation(latitude: number, longitude: number) {
-        const biggestHouses = await this.findBiggestHouses();
-
-        return this.db
-            .select('*')
-            .from('houses')
-            .whereIn('id', [...biggestHouses].map((house) => house.id))
+        return this.orderByNumberOfRooms()
             .whereRaw(`
               ST_DISTANCE(
                 POINT(longitude, latitude),
                 POINT(?, ?)
             )`, [longitude, latitude])
-            .orderBy('numberOfRooms', 'desc')
             .orderBy('builtDate', 'desc')
             .limit(3);
     }
 
-    async createHouse(request: HouseCreateInput) {
-        const insertedIds = await this.db('houses').insert(request);
+    async createHouse(data: HouseCreateInput) {
+        const insertedIds = await this.db(this.tableName).insert(data);
 
-        return this.db('houses').select('*').where('id', insertedIds[0]).first();
+        return await this.showHouse(insertedIds[0]);
     }
 
-    async updateHouse(request: HouseUpdateInput) {
-        return this.db('houses').where({ id: request.id }).update(request, ['*']);
+    async updateHouse(data: HouseUpdateInput) {
+        await this.db(this.tableName)
+            .where('id', data.id)
+            .update(omit(data, 'id'));
+
+        return await this.showHouse(data.id);
+    }
+
+    async showHouse(id: number) {
+        const house = await this.db(this.tableName)
+            .select('*')
+            .where('id', id)
+            .first();
+
+        if (!house) {
+            throw new HouseNotFoundException();
+        }
+
+        return house;
+    }
+
+    private orderByNumberOfRooms() {
+        return this.db(this.tableName)
+            .select('*')
+            .orderBy('numberOfRooms', 'desc');
     }
 }

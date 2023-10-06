@@ -12,15 +12,15 @@ function generateRandomDate(startDate: Date, endDate: Date) {
 
 function generateRandomHouse() {
     const name = `House ${Math.floor(Math.random() * 100000)}`;
-    const numberOfRooms = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    const numberOfRooms = Math.floor(Math.random() * 10) + 1;
     const builtDate = generateRandomDate(startDate, endDate);
-    const latitude = Math.random() * 180 - 90; // Random latitude between -90 and 90
-    const longitude = Math.random() * 360 - 180; // Random longitude between -180 and 180
+    const latitude = Math.random() * 180 - 90;
+    const longitude = Math.random() * 360 - 180;
 
     return {
         name,
-        number_of_rooms: numberOfRooms,
-        built_date: builtDate,
+        numberOfRooms: numberOfRooms,
+        builtDate: builtDate,
         latitude,
         longitude,
     };

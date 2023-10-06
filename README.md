@@ -46,25 +46,26 @@ To get started with this project, follow these steps:
     ```bash     
     cd test-app
 
-3. Install project dependencies:
-    ```bash 
-   npm install
-
-4.  Copy the .env.example file to .env and configure the environment variables as needed.
-5. Build the Docker containers:
+3. Copy the .env.example file to .env and configure the environment variables as needed.
+  
+4. Build the Docker containers:
     ```bash
    docker-compose build
-6. Start the Docker containers:
+   
+5. Start the Docker containers:
    ```bash
    docker-compose up
+   
 Your application should now be running. Access the GraphQL playground at http://localhost:4000/graphql.
    Project Structure
    The project structure is organized as follows:
 
+    db/: Contains db logic that is used outside of app's runtime
     src/: Contains the source code of the application.
-    graphql/: Includes GraphQL schemas and resolvers.
-    repositories/: Houses database interactions.
-    services/: Business logic and service layer.
+    src/graphql/: Includes GraphQL schemas and resolvers.
+    src/repositories/: Houses database interactions.
+    src/services/: Business logic and service layer.
+    src/types/: Typescript types.
     index.ts: Main entry point of the application.
     docker-compose.yml: Docker Compose configuration for MySQL and the Node.js application.
     package.json: Node.js package configuration.

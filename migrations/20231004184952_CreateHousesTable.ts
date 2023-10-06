@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<Knex.SchemaBuilder> {
         table.float('latitude').notNullable();
         table.float('longitude').notNullable();
         table.date('builtDate');
+        table.index(['latitude, longitude']);
     });
 }
 

@@ -1,6 +1,7 @@
-import {HouseCreateInput, HouseUpdateInput} from "../types/types";
+import {HouseCreateInput, HouseUpdateInput, QueryFindBiggestAndClosestArgs} from "../types/types";
 import {Knex} from "knex";
 import MysqlRepository from "./MysqlRepository";
+import NoHousesFoundException from "../exceptions/NoHousesFoundException";
 
 export default class HouseService {
     private db: Knex = (new MysqlRepository()).getClient();
@@ -13,16 +14,34 @@ export default class HouseService {
         return this.db.select('*').from('houses').where({id: id}).first();
     }
 
-    async findBiggestByNumberOfRooms(latitude: number, longitude: number) {
-        return this.db.select('*').from('houses').limit(3);
+    async findHousesByDistance({ latitude, longitude }: QueryFindBiggestAndClosestArgs, orderBy: any, limit: number) {
+        const MAX_DISTANCE_IN_METERS = 1000;
+
+        return this.db
+            .select('*')
+            .from('houses')
+            .whereRaw(`
+              ST_DISTANCE(
+                POINT(longitude, latitude),
+                POINT(?, ?)
+            ) < ?`, [longitude, latitude, MAX_DISTANCE_IN_METERS])
+            .orderBy(orderBy)
+            .limit(limit);
     }
 
-    async findBiggestAndClosest(latitude: number, longitude: number) {
-        return this.db.select('*').from('houses')
-            .where({
-                latitude,
-                longitude
-            }).limit(5);
+    async findBiggestAndNewest({ latitude, longitude }: QueryFindBiggestAndClosestArgs) {
+        const orderBy = [
+            { column: 'numberOfRooms', order: 'desc' },
+            { column: 'builtDate', order: 'desc' },
+        ];
+
+        return await this.findHousesByDistance({ latitude, longitude }, orderBy, 3);
+    }
+
+    async findBiggestAndClosest({ latitude, longitude }: QueryFindBiggestAndClosestArgs) {
+        const orderBy = [{ column: 'numberOfRooms', order: 'desc' }];
+
+        return await this.findHousesByDistance({ latitude, longitude }, orderBy, 5);
     }
 
     async updateHouse(request: HouseUpdateInput) {
@@ -30,6 +49,8 @@ export default class HouseService {
     }
 
     async createHouse(request: HouseCreateInput) {
-        return this.db.insert(request).into('houses');
+        const insertedIds = await this.db('houses').insert(request);
+
+        return this.db('houses').select('*').where('id', insertedIds[0]).first();
     }
 }

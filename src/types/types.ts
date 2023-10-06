@@ -7,28 +7,28 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  NumericID: number
   ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  NumericID: { input: any; output: any; }
 };
 
 export type House = {
   __typename?: 'House';
   builtDate?: Maybe<Scalars['String']['output']>;
   id: Scalars['NumericID']['output'];
-  latitude?: Maybe<Scalars['Int']['output']>;
-  longitude?: Maybe<Scalars['Int']['output']>;
+  latitude?: Maybe<Scalars['Float']['output']>;
+  longitude?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   numberOfRooms?: Maybe<Scalars['Int']['output']>;
 };
 
 export type HouseCreateInput = {
   builtDate?: InputMaybe<Scalars['String']['input']>;
-  latitude?: InputMaybe<Scalars['Int']['input']>;
-  longitude?: InputMaybe<Scalars['Int']['input']>;
+  latitude?: InputMaybe<Scalars['Float']['input']>;
+  longitude?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   numberOfRooms?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -36,8 +36,8 @@ export type HouseCreateInput = {
 export type HouseUpdateInput = {
   builtDate?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['NumericID']['input'];
-  latitude?: InputMaybe<Scalars['Int']['input']>;
-  longitude?: InputMaybe<Scalars['Int']['input']>;
+  latitude?: InputMaybe<Scalars['Float']['input']>;
+  longitude?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   numberOfRooms?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -61,18 +61,24 @@ export type MutationUpdateHouseArgs = {
 export type Query = {
   __typename?: 'Query';
   findBiggestAndClosest?: Maybe<Array<Maybe<House>>>;
-  findBiggestByNumberOfRooms?: Maybe<Array<Maybe<House>>>;
+  findBiggestAndNewest?: Maybe<Array<Maybe<House>>>;
   getAllHouses?: Maybe<Array<Maybe<House>>>;
   getHouse?: Maybe<House>;
 };
 
 
 export type QueryFindBiggestAndClosestArgs = {
-  latitude?: InputMaybe<Scalars['Int']['input']>;
-  longitude?: InputMaybe<Scalars['Int']['input']>;
+  latitude?: InputMaybe<Scalars['Float']['input']>;
+  longitude?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryFindBiggestAndNewestArgs = {
+  latitude?: InputMaybe<Scalars['Float']['input']>;
+  longitude?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
 export type QueryGetHouseArgs = {
-  id?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['NumericID']['input']>;
 };

@@ -2,7 +2,7 @@ import { ApolloServer } from "apollo-server-express";
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from "./src/graphql/resolvers/index";
-import express from "express";
+import express, {response} from "express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import http from "http";
 

@@ -29,7 +29,7 @@ input HouseCreateInput {
 type Query {
     getAllHouses: [House]
     getHouse(id: NumericID): House
-    findBiggestByNumberOfRooms: [House]
+    findBiggestAndNewest(longitude: Float, latitude: Float): [House]
     findBiggestAndClosest(longitude: Float, latitude: Float): [House]
 }
 

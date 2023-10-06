@@ -8,7 +8,7 @@ export default {
             return await houseService.createHouse(data);
         },
         updateHouse: (_: any, data: HouseUpdateInput) => {
-            const houseService: HouseService = new HouseService();
+            const houseService: HouseService = new HouseService()
             return houseService.updateHouse(data);
         },
     },

@@ -1,50 +1,36 @@
-import {HouseCreateInput, HouseUpdateInput} from "../types/types";
-import {Knex} from "knex";
-import MysqlRepository from "./MysqlRepository";
+import { HouseCreateInput, HouseUpdateInput } from "../types/types";
+import HouseRepository from "../repositories/HouseRepository";
 
 export default class HouseService {
-    private db: Knex = (new MysqlRepository()).getClient();
+    private houseRepository: HouseRepository;
+
+    constructor() {
+        this.houseRepository = new HouseRepository();
+    }
 
     async getAllHouses() {
-        return this.db.select('*').from('houses');
+        return this.houseRepository.getAllHouses();
     }
 
     async getHouse(id: number) {
-        return this.db.select('*').from('houses').where({id: id}).first();
+        return this.houseRepository.getHouse(id);
     }
 
     async findBiggestHouses() {
-        return this.db
-            .select('*')
-            .from('houses')
-            .orderBy('numberOfRooms', 'desc')
-            .limit(5);
+        return this.houseRepository.findBiggestHouses();
     }
 
     async findBiggestAndNewestByLocation({ latitude, longitude }: { latitude: number, longitude: number }) {
         const biggestHouses = await this.findBiggestHouses();
 
-        return this.db
-            .select('*')
-            .from('houses')
-            .whereIn('id', [...biggestHouses].map((house) => house.id))
-            .whereRaw(`
-              ST_DISTANCE(
-                POINT(longitude, latitude),
-                POINT(?, ?)
-            )`, [longitude, latitude])
-            .orderBy('numberOfRooms', 'desc')
-            .orderBy('builtDate', 'desc')
-            .limit(3);
+        return this.houseRepository.findBiggestAndNewestByLocation(latitude, longitude);
     }
 
     async updateHouse(request: HouseUpdateInput) {
-        return this.db('houses').where({id: request.id}).update(request, ['*']);
+        return this.houseRepository.updateHouse(request);
     }
 
     async createHouse(request: HouseCreateInput) {
-        const insertedIds = await this.db('houses').insert(request);
-
-        return this.db('houses').select('*').where('id', insertedIds[0]).first();
+        return this.houseRepository.createHouse(request);
     }
 }
